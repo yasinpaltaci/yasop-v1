@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ders Programı</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#fff;--ink:#000;--mut:#555;--line:#000;--soft:#ccc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--ink:#fff;--mut:#aaa;--line:#fff;--soft:#444}}
+:root[data-theme="dark"]{--bg:#000;--ink:#fff;--mut:#aaa;--line:#fff;--soft:#444}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Bricolage Grotesque",system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:18px 14px 40px}
+h1{font-size:28px;font-weight:800;margin:6px 0 2px;letter-spacing:-.02em}
+h2{font-size:17px;margin:0 0 10px;font-weight:600}
+p.sub{margin:0 0 18px;color:var(--mut)}
+section{border-top:1px solid var(--line);padding:16px 0}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.seg button,.btn{font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:9px 14px;border-radius:0;cursor:pointer;font-weight:600}
+.seg button.on,.btn.pri{background:var(--ink);color:var(--bg)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+label{display:flex;flex-direction:column;font-size:13px;color:var(--mut);gap:4px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:0;padding:8px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.ls{display:grid;grid-template-columns:1fr 64px 104px 36px;gap:6px;margin-bottom:6px;align-items:center}
+.ls input,.ls select{width:100%;min-width:0}
+.ls .x{padding:6px;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer;font:inherit}
+.tot{font-size:13px;color:var(--mut);margin-top:8px}.tot.bad{color:var(--ink);font-weight:800;text-decoration:underline}
+.wrap{overflow-x:auto}
+.tt{display:grid;gap:4px}
+.hd{font-weight:600;font-size:13px;text-align:center;padding:4px 0;border-bottom:1px solid var(--line)}
+.col{display:flex;flex-direction:column;gap:4px}
+.tm{height:48px;display:flex;align-items:center;font-size:12px;color:var(--mut);white-space:nowrap}
+.b{border:1px solid var(--line);border-left-width:5px;padding:5px 8px;font-size:13px;font-weight:600;display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.b small{font-weight:400;color:var(--mut)}
+.b.S{border-left-style:solid}.b.Z{border-left-style:double}.b.D{border-left-width:1px}
+.b.E{border:1px dashed var(--soft)}
+.lunch{height:28px;display:flex;align-items:center;font-size:12px;color:var(--mut);border-top:1px dotted var(--line);border-bottom:1px dotted var(--line)}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:10px;color:var(--mut)}
+.lg i{display:inline-block;width:18px;height:12px;border:1px solid var(--line);margin-right:6px;vertical-align:-1px}
+.cm{padding:8px 12px;margin-bottom:8px;border-left:1px dashed var(--line)}
+.cm.warn{border-left:5px solid var(--line)}.cm.info{border-left:2px solid var(--line)}
+.cm b{font-size:14px}.cm em{font-style:normal;font-size:12px;color:var(--mut);margin-left:8px}
+.cm div{color:var(--ink)}
+.note{font-size:12px;color:var(--mut);margin-top:6px}
+</style>
+</head>
+<body>
+<main>
+<h1>Ders programı</h1>
+<p class="sub">Alanını seç, ders saatlerini ve zil saatlerini ayarla; program dersleri 2 saatlik bloklar halinde dizsin ve yorumlasın.</p>
+
+<section>
+  <h2>Alan</h2>
+  <div class="seg" id="alan"></div>
+  <div class="row">
+    <label>Gün sayısı<select id="gun"><option>5</option><option>6</option></select></label>
+    <label>Günlük ders sayısı<input id="gd" type="number" min="4" max="10" value="8" style="width:110px"></label>
+    <label>Art arda ders<select id="blok"><option value="1">Tek tek</option><option value="2" selected>Her ders günde 2 saat art arda</option><option value="3">En fazla 3 saat (esnek)</option></select></label>
+  </div>
+</section>
+
+<section>
+  <h2>Zil saatleri</h2>
+  <div class="row">
+    <label>İlk ders başlangıcı<input id="bas" type="time" value="08:30"></label>
+    <label>Ders süresi (dk)<input id="sure" type="number" min="20" max="90" value="40" style="width:90px"></label>
+    <label>Tenefüs (dk)<input id="ten" type="number" min="0" max="30" value="10" style="width:90px"></label>
+    <label>Öğle arası<select id="oL"><option value="0">Yok</option><option value="3">3. dersten sonra</option><option value="4" selected>4. dersten sonra</option><option value="5">5. dersten sonra</option><option value="6">6. dersten sonra</option></select></label>
+    <label>Öğle süresi (dk)<input id="ogle" type="number" min="10" max="90" value="40" style="width:90px"></label>
+  </div>
+  <div class="note">Hiçbir ders öğle arasının üzerinden geçmez, yani bir blok öğle arasıyla ikiye bölünmez.</div>
+</section>
+
+<section>
+  <h2>Dersler ve haftalık saat</h2>
+  <div id="ders"></div>
+  <div class="row" style="margin-top:8px"><button class="btn" id="ekle">Ders ekle</button></div>
+  <div class="tot" id="tot"></div>
+</section>
+
+<div class="row" style="margin-bottom:6px">
+  <button class="btn pri" id="olustur">Programı oluştur</button>
+  <button class="btn" id="karistir">Yeniden karıştır</button>
+</div>
+
+<section>
+  <h2>Haftalık program</h2>
+  <div class="wrap"><div class="tt" id="tt"></div></div>
+  <div class="lg"><span><i style="border-left:5px solid"></i>Sayısal</span><span><i style="border-left:5px double"></i>Sözel</span><span><i></i>Diğer</span></div>
+</section>
+
+<section>
+  <h2>Program yorumları</h2>
+  <div id="yorum"></div>
+  <div class="note">Yorumlar, günlük sayısal ve sözel ders sayısına, art arda gelen derslere ve öğle arasına göre seçtiğin alana uygun olarak hazırlanır.</div>
+</section>
+</main>
+
+<script>
+const GUN=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+const ALAN={say:{ad:"Sayısal",tS:4,tZ:2},ea:{ad:"Eşit Ağırlık",tS:3,tZ:3},soz:{ad:"Sözel",tS:2,tZ:4}};
+const PRE={
+ say:[["Matematik",8,"S"],["Fizik",4,"S"],["Kimya",4,"S"],["Biyoloji",4,"S"],["Edebiyat",4,"Z"],["Tarih",2,"Z"],["İngilizce",4,"D"],["Din Kültürü",2,"D"],["Beden Eğitimi",2,"D"],["Rehberlik",2,"D"]],
+ ea:[["Matematik",6,"S"],["Geometri",2,"S"],["Edebiyat",6,"Z"],["Tarih",4,"Z"],["Coğrafya",4,"Z"],["Felsefe",2,"Z"],["İngilizce",4,"D"],["Din Kültürü",2,"D"],["Beden Eğitimi",2,"D"],["Rehberlik",2,"D"]],
+ soz:[["Edebiyat",6,"Z"],["Tarih",6,"Z"],["Coğrafya",4,"Z"],["Felsefe",2,"Z"],["Psikoloji",2,"Z"],["Matematik",4,"S"],["İngilizce",4,"D"],["Din Kültürü",2,"D"],["Beden Eğitimi",2,"D"],["Rehberlik",2,"D"]]
+};
+const $=id=>document.getElementById(id);
+const RH=48,LH=28;
+let alan="say",lessons=[],BL=[],ST=[];
+
+function setAlan(k){
+  alan=k;
+  lessons=PRE[k].map(x=>({n:x[0],h:x[1],t:x[2]}));
+  $("alan").innerHTML="";
+  Object.keys(ALAN).forEach(a=>{
+    const b=document.createElement("button");
+    b.textContent=ALAN[a].ad;b.className=a===alan?"on":"";
+    b.onclick=()=>setAlan(a);$("alan").appendChild(b);
+  });
+  drawLessons();gen();
+}
+function drawLessons(){
+  const box=$("ders");box.innerHTML="";
+  lessons.forEach((l,i)=>{
+    const r=document.createElement("div");r.className="ls";
+    r.innerHTML=`<input value="${l.n}" aria-label="Ders adı"><input type="number" min="1" max="12" value="${l.h}" aria-label="Haftalık saat"><select aria-label="Tür"><option value="S">Sayısal</option><option value="Z">Sözel</option><option value="D">Diğer</option></select><button class="x" aria-label="Sil">✕</button>`;
+    const [a,b,c,d]=r.children;
+    c.value=l.t;
+    a.oninput=()=>l.n=a.value;
+    b.oninput=()=>{l.h=Math.max(1,Math.min(12,+b.value||1));total()};
+    c.onchange=()=>l.t=c.value;
+    d.onclick=()=>{lessons.splice(i,1);drawLessons()};
+    box.appendChild(r);
+  });
+  total();
+}
+function cap(){return (+$("gun").value)*(+$("gd").value||8)}
+function total(){
+  const t=lessons.reduce((a,l)=>a+l.h,0),c=cap();
+  $("tot").textContent=`Toplam ${t} saat · kapasite ${c} saat`+(t>c?" — ders saatleri kapasiteyi aşıyor, günlük ders sayısını artır ya da saatleri azalt.":"");
+  $("tot").className="tot"+(t>c?" bad":"");
+}
+function mkBlocks(m){
+  const bl=[];
+  lessons.forEach((l,li)=>{
+    if(m===2){
+      const n=Math.floor(l.h/2);
+      if(n===0){bl.push({li,size:1,cat:l.t,n:l.n});return}
+      for(let k=0;k<n;k++)bl.push({li,size:(k===n-1&&l.h%2)?3:2,cat:l.t,n:l.n});
+      return;
+    }
+    const n=Math.ceil(l.h/m),base=Math.floor(l.h/n),ex=l.h%n;
+    for(let k=0;k<n;k++)bl.push({li,size:base+(k<ex?1:0),cat:l.t,n:l.n});
+  });
+  return bl;
+}
+const rnd=Math.random;
+function attempt(D,N,bl,L){
+  const g=Array.from({length:D},()=>Array(N).fill(-1));
+  const order=bl.map((b,i)=>({b,i,k:b.size+rnd()*.9})).sort((a,c)=>c.k-a.k);
+  for(const {b,i} of order){
+    let best=null,bs=1e9;
+    for(let d=0;d<D;d++){
+      const row=g[d],top=row.indexOf(-1);
+      const sameL=row.filter((v,j)=>v>=0&&bl[v].li===b.li&&(j===0||row[j-1]!==v)).length;
+      const cnt=row.filter(v=>v>=0&&bl[v].cat===b.cat).length;
+      const fill=row.filter(v=>v>=0).length;
+      for(let s=0;s+b.size<=N;s++){
+        if(L>0&&s<L&&s+b.size>L)continue;
+        let ok=true;for(let k=0;k<b.size;k++)if(row[s+k]!==-1){ok=false;break}
+        if(!ok)continue;
+        let up=0;for(let j=s-1;j>=0&&row[j]>=0&&bl[row[j]].cat===b.cat;j--)up++;
+        let dn=0;for(let j=s+b.size;j<N&&row[j]>=0&&bl[row[j]].cat===b.cat;j++)dn++;
+        const run=up+dn+b.size;
+        let sc=sameL*100+cnt*(b.cat==="D"?2:6)+fill*2+(s-top)*3+rnd()*5;
+        if(b.cat!=="D"&&run>3)sc+=(run-3)*25;
+        if(b.cat==="S")sc+=s*.6+(L>0&&s>=L?3*b.size:0);
+        if(sc<bs){bs=sc;best=[d,s]}
+      }
+    }
+    if(!best)return null;
+    for(let k=0;k<b.size;k++)g[best[0]][best[1]+k]=i;
+  }
+  return g;
+}
+function stats(g,bl,L){
+  return g.map(row=>{
+    let S=0,Z=0,D=0,rS=0,rZ=0,cs=0,cz=0,dup=0,aS=0;const seen={};
+    row.forEach((v,j)=>{
+      const c=v>=0?bl[v].cat:null;
+      if(c==="S"){S++;cs++;cz=0;if(L>0&&j>=L)aS++}else if(c==="Z"){Z++;cz++;cs=0}else{if(c==="D")D++;cs=0;cz=0}
+      rS=Math.max(rS,cs);rZ=Math.max(rZ,cz);
+      if(v>=0&&(j===0||row[j-1]!==v)){const li=bl[v].li;seen[li]=(seen[li]||0)+1;if(seen[li]===2)dup++}
+    });
+    return {S,Z,D,rS,rZ,dup,aS,tot:S+Z+D};
+  });
+}
+function cost(st){
+  const A=ALAN[alan],ss=st.map(x=>x.S);
+  return st.reduce((a,x)=>a+Math.max(0,x.rS-3)*10+Math.max(0,x.rZ-3)*10+x.dup*30+Math.max(0,x.S-A.tS)*6+Math.max(0,x.Z-A.tZ)*6+Math.max(0,x.aS-2)*4,0)+(Math.max(...ss)-Math.min(...ss))*4;
+}
+const fm=t=>`${Math.floor(t/60)}.${String(t%60).padStart(2,"0")}`;
+function times(N,L){
+  const [h,m]=($("bas").value||"08:30").split(":").map(Number);
+  let t=h*60+m;const dur=+$("sure").value||40,br=+$("ten").value||0,lu=+$("ogle").value||0,a=[];
+  for(let s=0;s<N;s++){a.push([t,t+dur]);t+=dur+(L>0&&s+1===L?lu:br)}
+  return a;
+}
+function gen(){
+  const D=+$("gun").value,N=+$("gd").value||8,L=+$("oL").value;
+  total();
+  BL=mkBlocks(+$("blok").value);
+  let best=null,bc=1e9;
+  for(let i=0;i<250;i++){
+    const g=attempt(D,N,BL,L);
+    if(!g)continue;
+    const st=stats(g,BL,L),c=cost(st);
+    if(c<bc){bc=c;best={g,st}}
+  }
+  if(!best){
+    $("tt").innerHTML="";
+    $("yorum").innerHTML='<div class="cm warn"><b>Program oluşturulamadı</b><div>Dersler öğle arası ve blok kurallarıyla kapasiteye sığmıyor. Günlük ders sayısını artır, bazı derslerin saatini azalt ya da art arda ayarını esnet.</div></div>';
+    return;
+  }
+  ST=best.st;
+  const tm=times(N,L);
+  draw(best.g,D,N,L,tm);
+  comment(ST,D,L,tm,N);
+}
+function draw(g,D,N,L,tm){
+  const tt=$("tt");
+  tt.style.gridTemplateColumns=`100px repeat(${D},minmax(96px,1fr))`;
+  tt.style.minWidth=(100+D*100)+"px";
+  tt.innerHTML="";
+  tt.appendChild(document.createElement("div"));
+  for(let d=0;d<D;d++){const h=document.createElement("div");h.className="hd";h.textContent=GUN[d];tt.appendChild(h)}
+  const nc=document.createElement("div");nc.className="col";
+  for(let s=0;s<N;s++){
+    if(L>0&&s===L){const e=document.createElement("div");e.className="lunch";e.textContent=`Öğle ${fm(tm[L-1][1])}–${fm(tm[L][0])}`;nc.appendChild(e)}
+    const e=document.createElement("div");e.className="tm";e.textContent=`${fm(tm[s][0])}–${fm(tm[s][1])}`;nc.appendChild(e);
+  }
+  tt.appendChild(nc);
+  for(let d=0;d<D;d++){
+    const col=document.createElement("div");col.className="col";
+    const row=g[d];
+    for(let s=0;s<N;){
+      if(L>0&&s===L){const e=document.createElement("div");e.className="lunch";col.appendChild(e)}
+      const v=row[s],el=document.createElement("div");
+      let size=1;
+      if(v>=0){size=BL[v].size;el.className="b "+BL[v].cat;el.innerHTML=`${BL[v].n}<small>${fm(tm[s][0])}–${fm(tm[s+size-1][1])}</small>`}
+      else el.className="b E";
+      el.style.height=(size*RH+(size-1)*4)+"px";
+      col.appendChild(el);s+=size;
+    }
+    tt.appendChild(col);
+  }
+}
+function comment(st,D,L,tm,N){
+  const A=ALAN[alan],out=[];
+  const S=st.reduce((a,x)=>a+x.S,0),Z=st.reduce((a,x)=>a+x.Z,0);
+  const pay=S+Z?Math.round(S/(S+Z)*100):0;
+  let gt=`Haftada ${S} sayısal, ${Z} sözel ders var (sayısal oranı %${pay}). Okul günü ${fm(tm[0][0])} ile ${fm(tm[N-1][1])} arasında. `;
+  if(alan==="say")gt+=pay>=50?"Sayısal alan için uygun bir dağılım.":"Sayısal alan için sayısal ders oranı düşük, ders saatlerini kontrol et.";
+  else if(alan==="ea")gt+=pay>=25&&pay<=60?"Eşit ağırlık için sayısal ve sözel denge iyi.":"Eşit ağırlık için dağılım bir tarafa kayıyor.";
+  else gt+=pay<=35?"Sözel alan için uygun bir dağılım.":"Sözel alan için sayısal ders oranı yüksek.";
+  out.push({k:"info",h:"Genel bakış",t:gt});
+  if($("blok").value=="2"){
+    const one=lessons.filter(l=>l.h===1).map(l=>l.n),odd=lessons.filter(l=>l.h>2&&l.h%2).map(l=>l.n);
+    if(one.length)out.push({k:"info",h:"Tek saatlik dersler",t:`${one.join(", ")} haftada 1 saat olduğu için tek başına yerleşti. 2 saat yaparsan art arda kuralına uyar.`});
+    if(odd.length)out.push({k:"info",h:"Tek saatli dersler",t:`${odd.join(", ")} tek sayıda saate sahip, bir günü 3 saat art arda oldu. Çift saat yaparsan hep 2 saatlik bloklar olur.`});
+  }
+  const ss=st.map(x=>x.S),mx=Math.max(...ss),mn=Math.min(...ss);
+  if(mx-mn>=3)out.push({k:"info",h:"Sayısal yük dengesiz",t:`${GUN[ss.indexOf(mx)]} günü ${mx}, ${GUN[ss.indexOf(mn)]} günü ${mn} sayısal ders var. Bir dersi hafif güne kaydırmak haftayı dengeler.`});
+  st.forEach((x,d)=>{
+    if(!x.tot)return;
+    const g=GUN[d];let any=false;
+    if(x.S>A.tS){any=true;out.push({k:"warn",h:g,t:`${x.S} sayısal ders var. ${A.ad} sınıfı için bu gün yoğun, bir dersi başka güne kaydırmayı dene.`})}
+    if(x.Z>A.tZ){any=true;out.push({k:"warn",h:g,t:`Aynı günde ${x.Z} sözel ders var. ${A.ad} programı için sözel yük fazla.`})}
+    if(x.rS>=4){any=true;out.push({k:"warn",h:g,t:`${x.rS} sayısal ders art arda geliyor. Araya sözel ya da hafif bir ders girmesi dikkati korur.`})}
+    else if(x.rS===3){any=true;out.push({k:A.tS>=4?"info":"warn",h:g,t:A.tS>=4?"3 sayısal ders arka arkaya. Sayısal alan için kabul edilebilir, aralarda mola vermeyi unutma.":"3 sayısal ders arka arkaya. Bu alan için yorucu olabilir, aralarda mutlaka mola ver."})}
+    else if(x.rZ>=4){any=true;out.push({k:"warn",h:g,t:`${x.rZ} sözel ders art arda. Okuma yükü uzun sürüyor, araya farklı türde ders koymak iyi olur.`})}
+    if(L>0&&x.aS>=3){any=true;out.push({k:"warn",h:g,t:`Öğle arasından sonra ${x.aS} sayısal ders var. Öğleden sonra dikkat düşer, ağır dersleri sabaha almak daha verimli olur.`})}
+    if(x.dup>0){any=true;out.push({k:"info",h:g,t:"Aynı ders gün içinde iki ayrı bloğa bölünmüş. Kapasite buna zorladı, günlük ders sayısını artırmak yardımcı olur."})}
+    if(!any){
+      const t=x.S>=2&&x.Z>=1?`${x.S} sayısal, ${x.Z} sözel ders: dengeli bir gün.`:x.S<=1?`Hafif sayısal yük (${x.S} ders). Zihinsel olarak rahat bir gün.`:`${x.S} sayısal ders var, ${A.ad} için makul bir yük.`;
+      out.push({k:"ok",h:g,t});
+    }
+  });
+  const tag={ok:"uygun",info:"not",warn:"dikkat"};
+  $("yorum").innerHTML=out.map(o=>`<div class="cm ${o.k}"><b>${o.h}</b><em>${tag[o.k]}</em><div>${o.t}</div></div>`).join("");
+}
+["olustur","karistir"].forEach(i=>$(i).onclick=gen);
+["gun","gd","blok","bas","sure","ten","oL","ogle"].forEach(i=>$(i).onchange=gen);
+$("ekle").onclick=()=>{lessons.push({n:"Yeni ders",h:2,t:"D"});drawLessons()};
+setAlan("say");
+</script>
+</body>
+</html>
